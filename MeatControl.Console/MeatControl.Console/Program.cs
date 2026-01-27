@@ -65,6 +65,7 @@ static void AddMeat()
 
     if (continueOption == 'y')
     {
+        Console.WriteLine($"{meat}");
         AddMeat();
     }
 

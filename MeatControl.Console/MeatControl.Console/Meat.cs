@@ -11,5 +11,10 @@
             Cut = cut;
             Price = price;
         }
+
+        public override string ToString ()
+        {
+            return $"{Id} - {Cut}, {Price}";
+        }
     }
 }
