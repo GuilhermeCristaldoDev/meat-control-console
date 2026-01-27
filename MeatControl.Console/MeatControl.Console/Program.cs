@@ -18,7 +18,6 @@ do
     switch (option)
     {
         case '1':
-            Console.WriteLine("Adding meat...");
             AddMeat(filePath);
             break;
         case '2':
@@ -50,6 +49,8 @@ static void AddMeat(string filePath)
     double price = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
 
     Meat meat = new(getMeatId(filePath), type, price);
+
+    File.AppendAllText(filePath, meat.ToString() + "\n");
 
     char continueOption;
 
