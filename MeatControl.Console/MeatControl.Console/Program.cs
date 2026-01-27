@@ -1,5 +1,4 @@
 ﻿using MeatControl.Console;
-using System.Data;
 using System.Globalization;
 
 char option;
@@ -30,6 +29,9 @@ do
         case '4':
             Console.WriteLine("Editing meat...");
             break;
+        case '0':
+            Console.WriteLine("Exiting...");
+            break;
         default:
             Console.WriteLine("Invalid option!");
             break;
@@ -38,7 +40,7 @@ do
 while (option != '0');
 
 static void AddMeat()
-{
+{   
     Console.Clear();
 
     Console.Write("Type of meat: ");
@@ -50,18 +52,18 @@ static void AddMeat()
 
     //create file
 
-    char option;
+    char continueOption;
 
     Console.Write("\nAdd more one meat (y/n)? ");
 
     do
     {
         ConsoleKeyInfo key = Console.ReadKey(true);
-        option = key.KeyChar;
+        continueOption = key.KeyChar;
     }
-    while (option != 'y' && option != 'n');
+    while (continueOption != 'y' && continueOption != 'n');
 
-    if (option == 'y')
+    if (continueOption == 'y')
     {
         AddMeat();
     }
