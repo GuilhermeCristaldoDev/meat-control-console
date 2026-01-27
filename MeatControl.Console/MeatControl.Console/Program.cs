@@ -47,32 +47,43 @@ while (option != '0');
 
 static void AddMeat(string filePath)
 {
-    Console.Clear();
-
-    Console.Write("Type of meat: ");
-    string type = Console.ReadLine();
-    Console.Write("Price: ");
-    double price = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
-
-    Meat meat = new(GetMeatId(filePath), type, price);
-
-    File.AppendAllText(filePath, meat.ToString() + Environment.NewLine);
-
-    char continueOption;
-
-    Console.Write("\nAdd more one meat (y/n)? ");
+    bool continueOption;
 
     do
     {
-        ConsoleKeyInfo key = Console.ReadKey(true);
-        continueOption = key.KeyChar;
-    }
-    while (continueOption != 'y' && continueOption != 'n');
+        Console.Clear();
 
-    if (continueOption == 'y')
-    {
-        AddMeat(filePath);
+        Console.Write("Type of meat: ");
+        string type = Console.ReadLine();
+        Console.Write("Price: ");
+        double price = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+
+        Meat meat = new(GetMeatId(filePath), type, price);
+
+        File.AppendAllText(filePath, meat.ToString() + Environment.NewLine);
+
+        ConsoleKeyInfo key;
+      
+        do
+        {
+            Console.Write("\nAdd more one meat (y/n)? ");
+            key = Console.ReadKey(true);
+
+            if(key.KeyChar != 'y' && key.KeyChar != 'n') Console.WriteLine("\nInvalid key!");
+        }
+        while (key.KeyChar != 'y' && key.KeyChar != 'n');
+
+
+        if (key.KeyChar == 'y')
+        {
+            continueOption = true;
+        }
+        else
+        {
+            continueOption = false;
+        }
     }
+    while (continueOption);
 }
 
 static int GetMeatId(string file)
