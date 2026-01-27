@@ -2,6 +2,7 @@
 using System.Globalization;
 
 char option;
+string filePath = "C:\\Users\\Guilherme\\Documents\\churrascaria\\carnes.txt";
 
 do
 {
@@ -18,7 +19,7 @@ do
     {
         case '1':
             Console.WriteLine("Adding meat...");
-            AddMeat();
+            AddMeat(filePath);
             break;
         case '2':
             Console.WriteLine("Removing meat...");
@@ -39,8 +40,8 @@ do
 }
 while (option != '0');
 
-static void AddMeat()
-{   
+static void AddMeat(string filePath)
+{
     Console.Clear();
 
     Console.Write("Type of meat: ");
@@ -48,9 +49,7 @@ static void AddMeat()
     Console.Write("Price: ");
     double price = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
 
-    Meat meat = new(type, price);
-
-    //create file
+    Meat meat = new(getMeatId(filePath), type, price);
 
     char continueOption;
 
@@ -65,10 +64,28 @@ static void AddMeat()
 
     if (continueOption == 'y')
     {
-        Console.WriteLine($"{meat}");
-        AddMeat();
+        AddMeat(filePath);
     }
 
     Console.Clear();
+}
+
+static int getMeatId(string file)
+{
+    int lastId;
+
+    string[] fileLines = File.ReadAllLines(file);
+
+    if (fileLines.Length == 0)
+    {
+        lastId = 1;
+        return lastId;
+    }
+    string[] lastLine = fileLines[fileLines.Length - 1].Split(';');
+
+    lastId = int.Parse(lastLine[0]);
+
+    lastId += 1;
+    return lastId;
 }
 
