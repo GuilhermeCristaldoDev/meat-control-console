@@ -1,12 +1,12 @@
 ﻿using MeatControl.Console;
+using System.Data;
 using System.Globalization;
-using System.Transactions;
 
 char option;
 string filePath = "C:\\Users\\Guilherme\\Documents\\churrascaria\\carnes.txt";
 
 do
-{   
+{
     Console.WriteLine("1 - Add meat");
     Console.WriteLine("2 - Remove meat");
     Console.WriteLine("3 - List all meats");
@@ -22,7 +22,7 @@ do
             AddMeat(filePath);
             break;
         case '2':
-            Console.WriteLine("Removing meat...");
+            RemoveMeat(filePath);
             break;
         case '3':
             ListAllMeats(filePath);
@@ -51,7 +51,7 @@ static void AddMeat(string filePath)
 
     Meat meat = new(GetMeatId(filePath), type, price);
 
-    File.AppendAllText(filePath, meat.ToString() + "\n");
+    File.AppendAllText(filePath, meat.ToString() + Environment.NewLine);
 
     char continueOption;
 
@@ -105,5 +105,53 @@ static void ListAllMeats(string file)
     }
 
     Console.WriteLine();
+}
+
+static void RemoveMeat(string file)
+{
+    Console.Clear();
+
+    ListAllMeats(file);
+
+    Console.Write("Enter the meat ID to be deleted: ");
+    int id = int.Parse(Console.ReadLine());
+
+    string[] lines = File.ReadAllLines(file);
+
+    bool idExists = false;
+    string firstChar;
+
+    foreach (string line in lines)
+    {
+        firstChar = line.Split(';')[0];
+
+        if (int.Parse(firstChar) == id)
+        {
+            idExists = true;
+        }
+    }
+
+    if (!idExists)
+    {
+        Console.Clear();
+        Console.WriteLine("Id not exist!");
+    }
+
+    if (idExists)
+    {
+        File.WriteAllText(file, string.Empty);
+
+        foreach (string line in lines)
+        {
+            firstChar = line.Split(';')[0];
+
+            if (int.Parse(firstChar) != id)
+            {
+                File.AppendAllText(file, line + Environment.NewLine);
+            }
+        }
+
+        Console.WriteLine("Meat deleted!");
+    }
 }
 
