@@ -1,11 +1,12 @@
 ﻿using MeatControl.Console;
 using System.Globalization;
+using System.Transactions;
 
 char option;
 string filePath = "C:\\Users\\Guilherme\\Documents\\churrascaria\\carnes.txt";
 
 do
-{
+{   
     Console.WriteLine("1 - Add meat");
     Console.WriteLine("2 - Remove meat");
     Console.WriteLine("3 - List all meats");
@@ -24,7 +25,7 @@ do
             Console.WriteLine("Removing meat...");
             break;
         case '3':
-            Console.WriteLine("Listing all meats...");
+            ListAllMeats(filePath);
             break;
         case '4':
             Console.WriteLine("Editing meat...");
@@ -48,7 +49,7 @@ static void AddMeat(string filePath)
     Console.Write("Price: ");
     double price = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
 
-    Meat meat = new(getMeatId(filePath), type, price);
+    Meat meat = new(GetMeatId(filePath), type, price);
 
     File.AppendAllText(filePath, meat.ToString() + "\n");
 
@@ -71,7 +72,7 @@ static void AddMeat(string filePath)
     Console.Clear();
 }
 
-static int getMeatId(string file)
+static int GetMeatId(string file)
 {
     int lastId;
 
@@ -88,5 +89,21 @@ static int getMeatId(string file)
 
     lastId += 1;
     return lastId;
+}
+
+static void ListAllMeats(string file)
+{
+    Console.Clear();
+
+    string[] fileLines = File.ReadAllLines(file);
+
+    Console.WriteLine("List of meats: ");
+
+    foreach (string line in fileLines)
+    {
+        Console.WriteLine(line);
+    }
+
+    Console.WriteLine();
 }
 

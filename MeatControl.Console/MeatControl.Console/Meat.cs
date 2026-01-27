@@ -1,4 +1,6 @@
-﻿namespace MeatControl.Console
+﻿using System.Globalization;
+
+namespace MeatControl.Console
 {
     internal class Meat
     {
@@ -15,7 +17,7 @@
 
         public override string ToString ()
         {
-            return $"{Id};{Cut};{Price}";
+            return $"{Id};{Cut};{Price.ToString("F2", CultureInfo.InvariantCulture)}";
         }
     }
 }
