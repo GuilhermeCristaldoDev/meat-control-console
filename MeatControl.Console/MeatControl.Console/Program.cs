@@ -20,21 +20,26 @@ do
     {
         case '1':
             AddMeat(filePath);
+            PressKeyMessage();
             break;
         case '2':
             RemoveMeat(filePath);
+            PressKeyMessage();
             break;
         case '3':
             ListAllMeats(filePath);
+            PressKeyMessage();
             break;
         case '4':
             Console.WriteLine("Editing meat...");
+            PressKeyMessage();
             break;
         case '0':
             Console.WriteLine("Exiting...");
             break;
         default:
             Console.WriteLine("Invalid option!");
+            PressKeyMessage();
             break;
     }
 }
@@ -68,8 +73,6 @@ static void AddMeat(string filePath)
     {
         AddMeat(filePath);
     }
-
-    Console.Clear();
 }
 
 static int GetMeatId(string file)
@@ -103,8 +106,6 @@ static void ListAllMeats(string file)
     {
         Console.WriteLine(line);
     }
-
-    Console.WriteLine();
 }
 
 static void RemoveMeat(string file)
@@ -113,7 +114,7 @@ static void RemoveMeat(string file)
 
     ListAllMeats(file);
 
-    Console.Write("Enter the meat ID to be deleted: ");
+    Console.Write("\nEnter the meat ID to be deleted: ");
     int id = int.Parse(Console.ReadLine());
 
     string[] lines = File.ReadAllLines(file);
@@ -151,7 +152,14 @@ static void RemoveMeat(string file)
             }
         }
 
-        Console.WriteLine("Meat deleted!");
+        Console.WriteLine("\nMeat deleted!");
     }
+
 }
 
+static void PressKeyMessage()
+{
+    Console.WriteLine("\nPress any key to continue...");
+    Console.ReadKey(true);
+    Console.Clear();
+}
