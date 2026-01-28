@@ -1,5 +1,4 @@
 ﻿using MeatControl.Console;
-using System.Data;
 using System.Globalization;
 
 char option;
@@ -55,21 +54,34 @@ static void AddMeat(string filePath)
 
         Console.Write("Type of meat: ");
         string type = Console.ReadLine();
-        Console.Write("Price: ");
-        double price = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+
+
+        double price;
+        bool valid;
+        do
+        {
+            Console.Write("Price: ");
+            string input = Console.ReadLine();
+
+            valid = double.TryParse(input, NumberStyles.Any, CultureInfo.InvariantCulture, out price);
+
+            if (!valid)
+                Console.WriteLine("Invalid price!");
+        }
+        while (!valid);
 
         Meat meat = new(GetMeatId(filePath), type, price);
 
         File.AppendAllText(filePath, meat.ToString() + Environment.NewLine);
 
         ConsoleKeyInfo key;
-      
+
         do
         {
             Console.Write("\nAdd more one meat (y/n)? ");
             key = Console.ReadKey(true);
 
-            if(key.KeyChar != 'y' && key.KeyChar != 'n') Console.WriteLine("\nInvalid key!");
+            if (key.KeyChar != 'y' && key.KeyChar != 'n') Console.WriteLine("\nInvalid key!");
         }
         while (key.KeyChar != 'y' && key.KeyChar != 'n');
 
@@ -125,8 +137,17 @@ static void RemoveMeat(string file)
 
     ListAllMeats(file);
 
-    Console.Write("\nEnter the meat ID to be deleted: ");
-    int id = int.Parse(Console.ReadLine());
+    int id;
+    bool validId;
+
+    do
+    {
+        Console.Write("\nEnter the meat ID to be deleted: ");
+        string input = Console.ReadLine();
+
+        validId = int.TryParse(input, CultureInfo.InvariantCulture, out id);
+    }
+    while (!validId);
 
     string[] lines = File.ReadAllLines(file);
 
