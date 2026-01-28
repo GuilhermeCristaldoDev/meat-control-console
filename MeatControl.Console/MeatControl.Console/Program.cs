@@ -59,7 +59,6 @@ internal class Program
                 Console.Write("Type of meat: ");
                 string type = Console.ReadLine();
 
-
                 double price;
                 bool valid;
                 do
@@ -89,15 +88,8 @@ internal class Program
                 }
                 while (key.KeyChar != 'y' && key.KeyChar != 'n');
 
-
-                if (key.KeyChar == 'y')
-                {
-                    continueOption = true;
-                }
-                else
-                {
-                    continueOption = false;
-                }
+                continueOption = key.KeyChar == 'y';
+    
             }
             while (continueOption);
         }
@@ -158,18 +150,7 @@ internal class Program
 
             string[] lines = File.ReadAllLines(file);
 
-            bool idExists = false;
-            string firstChar;
-
-            foreach (string line in lines)
-            {
-                firstChar = line.Split(';')[0];
-
-                if (int.Parse(firstChar) == id)
-                {
-                    idExists = true;
-                }
-            }
+            bool idExists = CheckIdExist(id, lines);
 
             if (!idExists)
             {
@@ -179,21 +160,46 @@ internal class Program
 
             if (idExists)
             {
-                File.WriteAllText(file, string.Empty);
-
-                foreach (string line in lines)
-                {
-                    firstChar = line.Split(';')[0];
-
-                    if (int.Parse(firstChar) != id)
-                    {
-                        File.AppendAllText(file, line + Environment.NewLine);
-                    }
-                }
-
+                RemoveLine(file, lines, id);
                 Console.WriteLine("\nMeat deleted!");
             }
 
+        }
+
+        static void RemoveLine(string file, string[] lines, int id)
+        {
+            List<string> remainingLines = [];
+
+            string firstChar;
+
+            foreach (string line in lines)
+            {
+                firstChar = line.Split(';')[0];
+
+                if (int.Parse(firstChar) != id)
+                {
+                    remainingLines.Add(line);
+                }
+            }
+
+            File.WriteAllLines(file, remainingLines);
+        }
+
+        static bool CheckIdExist(int id, string[] lines)
+        {
+            string firstChar;
+
+            foreach (string line in lines)
+            {
+                firstChar = line.Split(';')[0];
+
+                if (int.Parse(firstChar) == id)
+                {
+                    return true;
+                }   
+            }
+
+            return false;
         }
 
         static void PressKeyMessage()
@@ -201,6 +207,11 @@ internal class Program
             Console.WriteLine("\nPress any key to continue...");
             Console.ReadKey(true);
             Console.Clear();
+        }
+
+        static void EditMeat()
+        {
+
         }
     }
 }
