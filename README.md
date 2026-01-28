@@ -23,11 +23,9 @@ Each meat record is stored in the following format:
 
 ID;Name;Price
 
-
 Example:
 1;Picanha;89.90
 2;Alcatra;59.50
-
 
 ## Technologies
 
