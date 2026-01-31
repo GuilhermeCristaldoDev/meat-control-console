@@ -6,5 +6,9 @@ namespace MeatControl.Console.Services
 {
     internal class MeatService
     {
+        public AddMeat()
+        {
+
+        }
     }
 }

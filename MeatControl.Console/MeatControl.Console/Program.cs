@@ -1,4 +1,4 @@
-﻿using MeatControl.Console;
+﻿using MeatControl.Console.Entities;
 using System.Globalization;
 
 internal class Program
