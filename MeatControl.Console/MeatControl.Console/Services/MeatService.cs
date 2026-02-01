@@ -31,12 +31,12 @@ namespace MeatControl.Console.Services
 
         public void RemoveMeat(int id)
         {
-            if(id <= 0)
+            if (id <= 0)
             {
                 return;
             }
 
-            if(!IdExists(id))
+            if (!IdExists(id))
             {
                 return;
             }
@@ -44,30 +44,42 @@ namespace MeatControl.Console.Services
             _repository.Delete(id);
         }
 
+        public void EditMeat(int id, string type, double price)
+        {
+            List<Meat> meats = _repository.GetAll();
+
+            if(price <= 0)
+            {
+                return;
+            }
+
+            Meat newMeat = new(id, type, price);
+
+            _repository.Update(id, newMeat);
+        }
+
         public bool IdExists(int id)
         {
             List<Meat> meats = _repository.GetAll();
 
-            if (meats.Count == 0) {
-                return false;
-            }
+            Meat meat = meats.Find(meat => meat.Id == id);
 
-            bool idExist = false;
+            if (meat == null)
+                throw new Exception("This meat doesn't exists");
 
-            foreach (Meat meat in meats)
-            {
-                if(id == meat.Id)
-                {
-                    idExist = true;
-                }
-            }
-
-            return idExist;
+            return true;
         }
 
         public List<Meat> GetAllMeats()
         {
             return _repository.GetAll();
+        }
+
+        public Meat GetMeatById(int id)
+        {
+            Meat meat = _repository.GetById(id) ?? throw new Exception("Meat doesn't exists");
+
+            return meat;
         }
 
         private int GetNextMeatId()
@@ -79,15 +91,7 @@ namespace MeatControl.Console.Services
                 return 1;
             }
 
-            int maxId = 0;
-
-            for (int i = 0; i < meats.Count; i++)
-            {
-                if (maxId < meats[i].Id)
-                {
-                    maxId = meats[i].Id;
-                }
-            }
+            int maxId = meats.Max(meat => meat.Id);
 
             return maxId + 1;
         }

@@ -7,7 +7,7 @@ internal class Program
 {
     private readonly MeatService _meatService;
 
-    public Program (MeatService meatService)
+    public Program(MeatService meatService)
     {
         _meatService = meatService;
     }
@@ -50,11 +50,11 @@ internal class Program
                     PressKeyMessage();
                     break;
                 case '3':
-                    ListAllMeats();
+                    ListAllMeatsUI();
                     PressKeyMessage();
                     break;
                 case '4':
-                    EditMeat();
+                    EditMeatUI();
                     PressKeyMessage();
                     break;
                 case '0':
@@ -113,16 +113,13 @@ internal class Program
         while (continueOption);
     }
 
-    void RemoveMeatUI( )
+    void RemoveMeatUI()
     {
         Console.Clear();
 
         List<Meat> meats = _meatService.GetAllMeats();
 
-        foreach (Meat meat in meats)
-        {
-            Console.WriteLine($"${meat.Id} - {meat.Cut} : {meat.Price}");
-        }
+        WriteAllMeats(meats);
 
         int id;
         bool validId;
@@ -134,92 +131,28 @@ internal class Program
         }
         while (!validId);
 
-        string[] lines = File.ReadAllLines(file);
+        _meatService.RemoveMeat(id);
 
-        bool idExists = CheckIdExist(id, lines);
-
-        if (!idExists)
-        {
-            Console.Clear();
-            Console.WriteLine("Id not exist!");
-            return;
-        }
-
-        RemoveLine(file, lines, id);
         Console.WriteLine("\nMeat deleted!");
 
     }
 
-    void ListAllMeats(string file)
+    void ListAllMeatsUI()
     {
         Console.Clear();
 
-        string[] fileLines = File.ReadAllLines(file);
+        List<Meat> meats = _meatService.GetAllMeats();
 
-        Console.WriteLine("List of meats: ");
-
-        foreach (string line in fileLines)
-        {
-            Console.WriteLine(line);
-        }
+        WriteAllMeats(meats);
     }
 
-   
-
-    static void RemoveLine(string file, string[] lines, int id)
+    void EditMeatUI()
     {
-        List<string> remainingLines = [];
-
-        string firstChar;
-
-        foreach (string line in lines)
-        {
-            firstChar = line.Split(';')[0];
-
-            if (int.Parse(firstChar) != id)
-            {
-                remainingLines.Add(line);
-            }
-        }
-
-        File.WriteAllLines(file, remainingLines);
-    }
-
-    bool CheckIdExist(int id, string[] lines)
-    {
-        string firstChar;
-
-        foreach (string line in lines)
-        {
-            firstChar = line.Split(';')[0];
-
-            if (int.Parse(firstChar) == id)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    void PressKeyMessage()
-    {
-        Console.WriteLine("\nPress any key to continue...");
-        Console.ReadKey(true);
         Console.Clear();
-    }
 
-    string SendMessageAndGetValue(string message)
-    {
-        Console.Write(message);
-        string input = Console.ReadLine();
+        List<Meat> meats = _meatService.GetAllMeats();
 
-        return input;
-    }
-
-    void EditMeat(string file)
-    {
-        ListAllMeats(file);
+        WriteAllMeats(meats);
 
         int id;
         bool validId;
@@ -235,57 +168,54 @@ internal class Program
         }
         while (!validId);
 
-        string[] fileLines = File.ReadAllLines(file);
-
-        bool existId = CheckIdExist(id, fileLines);
-
-        if (!existId)
+        try
         {
-            Console.Clear();
-            Console.WriteLine("Id do not exist!");
-            return;
+            Meat meat = _meatService.GetMeatById(id);
+
+            string newType = SendMessageAndGetValue("New meat type: ");
+
+            double newPrice;
+            bool validPrice;
+
+            do
+            {
+                string input = SendMessageAndGetValue("New meat price: ");
+                validPrice = double.TryParse(input, CultureInfo.InvariantCulture, out newPrice);
+            }
+            while (!validPrice);
+
+            _meatService.EditMeat(id, newType, newPrice);
+
+            Console.WriteLine("\nItem was edited!");
         }
-
-        string inputType = "";
-
-        List<string> list = [];
-
-        foreach (string line in fileLines)
+        catch (NotFoundExeption ex)
         {
-            string firstChar = line.Split(";")[0];
-
-            if (int.Parse(firstChar) != id)
-            {
-                list.Add(line);
-            }
-            else
-            {
-                Console.Write("Type of meat: ");
-                string type = Console.ReadLine();
-
-                double price;
-                bool valid;
-                do
-                {
-                    Console.Write("Price: ");
-                    string input = Console.ReadLine();
-
-                    valid = double.TryParse(input, NumberStyles.Any, CultureInfo.InvariantCulture, out price);
-
-                    if (!valid)
-                        Console.WriteLine("Invalid price!");
-                }
-                while (!valid);
-
-                string editedItem = $"{id};{type};{price}";
-
-                list.Add(editedItem);
-            }
+            Console.WriteLine(ex.Message);
         }
-
-        File.WriteAllLines(file, list);
-
-        Console.WriteLine("\nItem was edited!");
 
     }
+
+    static void PressKeyMessage()
+    {
+        Console.WriteLine("\nPress any key to continue...");
+        Console.ReadKey(true);
+        Console.Clear();
+    }
+
+    static string SendMessageAndGetValue(string message)
+    {
+        Console.Write(message);
+        string input = Console.ReadLine();
+
+        return input;
+    }
+
+    public static void WriteAllMeats(List<Meat> meats)
+    {
+        foreach (Meat meat in meats)
+        {
+            Console.WriteLine($"{meat.Id} - {meat.Cut} : {meat.Price.ToString("F2", CultureInfo.InvariantCulture)}");
+        }
+    }
+
 }

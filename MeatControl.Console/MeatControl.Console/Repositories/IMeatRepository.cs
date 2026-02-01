@@ -8,7 +8,9 @@ namespace MeatControl.Console.Repositories
         List<Meat> GetAll();
         void Delete(int id);
 
-        void Edit(int id, Meat meat);
+        void Update(int id, Meat meat);
+
+        Meat GetById(int id);
 
     }
 }

@@ -13,14 +13,14 @@ namespace MeatControl.Console.Repositories
         }
         public void Add(Meat meat)
         {
-            File.AppendAllText(_filePath, $"{meat.Id};{meat.Cut};{meat.Price.ToString("F2", CultureInfo.InvariantCulture)}{Environment.NewLine}");
+            File.AppendAllText(_filePath, $"{meat.Id};{meat.Cut};{meat.Price.ToString(CultureInfo.InvariantCulture)}{Environment.NewLine}");
         }
 
         public List<Meat> GetAll()
         {
             List<Meat> meats = [];
 
-            if (File.Exists(_filePath))
+            if (!File.Exists(_filePath))
                 return meats;
 
             foreach (string line in File.ReadLines(_filePath))
@@ -39,20 +39,31 @@ namespace MeatControl.Console.Repositories
         {
             List<Meat> meats = GetAll();
 
-            foreach (Meat meat in meats)
-            {
-                if(meat.Id == id)
-                {
-                    meats.Remove(meat);
-                }
-            }
+            meats.RemoveAll(meat => meat.Id == id);
 
-            File.WriteAllLines(_filePath, (string) meats);
+            var lines = meats.Select(meat => $"{meat.Id};{meat.Cut};{meat.Price.ToString(CultureInfo.InvariantCulture)}");
+
+            File.WriteAllLines(_filePath, lines);
         }
 
-        public void Edit(int id, Meat meat)
+        public void Update(int id, Meat newMeat)
         {
+            List<Meat> meats = GetAll();
 
+            meats = [.. meats.Select(meat =>
+                meat.Id == id ? newMeat : meat
+             )];
+
+            var lines = meats.Select(meat => $"{meat.Id};{meat.Cut};{meat.Price.ToString(CultureInfo.InvariantCulture)}");
+
+            File.WriteAllLines(_filePath, lines);
+        }
+
+        public Meat GetById(int id)
+        {
+            List<Meat> meats = GetAll();
+
+            return meats.Find(meat => meat.Id == id);
         }
     }
 }
