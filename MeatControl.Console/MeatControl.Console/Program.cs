@@ -1,12 +1,32 @@
 ﻿using MeatControl.Console.Entities;
+using MeatControl.Console.Repositories;
+using MeatControl.Console.Services;
 using System.Globalization;
 
 internal class Program
 {
+    private readonly MeatService _meatService;
+
+    public Program (MeatService meatService)
+    {
+        _meatService = meatService;
+    }
     private static void Main(string[] args)
+
+    {
+        string filePath = "C:\\Users\\Guilherme\\Documents\\churrascaria\\carnes.txt";
+
+        IMeatRepository repository = new MeatRepository(filePath);
+        MeatService meatService = new(repository);
+
+        var program = new Program(meatService);
+        program.Run();
+
+    }
+
+    public void Run()
     {
         char option;
-        string filePath = "C:\\Users\\Guilherme\\Documents\\churrascaria\\carnes.txt";
 
         do
         {
@@ -22,19 +42,19 @@ internal class Program
             switch (option)
             {
                 case '1':
-                    AddMeat(filePath);
+                    AddMeatUI();
                     PressKeyMessage();
                     break;
                 case '2':
-                    RemoveMeat(filePath);
+                    RemoveMeatUI();
                     PressKeyMessage();
                     break;
                 case '3':
-                    ListAllMeats(filePath);
+                    ListAllMeats();
                     PressKeyMessage();
                     break;
                 case '4':
-                    EditMeat(filePath);
+                    EditMeat();
                     PressKeyMessage();
                     break;
                 case '0':
@@ -49,7 +69,7 @@ internal class Program
         while (option != '0');
     }
 
-    static void AddMeat(string filePath)
+    public void AddMeatUI()
     {
         bool continueOption;
 
@@ -74,9 +94,7 @@ internal class Program
             }
             while (!valid);
 
-            Meat meat = new(GetMeatId(filePath), type, price);
-
-            File.AppendAllText(filePath, meat.ToString() + Environment.NewLine);
+            _meatService.AddMeat(type, price);
 
             ConsoleKeyInfo key;
 
@@ -95,44 +113,16 @@ internal class Program
         while (continueOption);
     }
 
-    static int GetMeatId(string file)
-    {
-        int lastId;
-
-        string[] fileLines = File.ReadAllLines(file);
-
-        if (fileLines.Length == 0)
-        {
-            lastId = 1;
-            return lastId;
-        }
-        string[] lastLine = fileLines[fileLines.Length - 1].Split(';');
-
-        lastId = int.Parse(lastLine[0]);
-
-        lastId += 1;
-        return lastId;
-    }
-
-    static void ListAllMeats(string file)
+    void RemoveMeatUI( )
     {
         Console.Clear();
 
-        string[] fileLines = File.ReadAllLines(file);
+        List<Meat> meats = _meatService.GetAllMeats();
 
-        Console.WriteLine("List of meats: ");
-
-        foreach (string line in fileLines)
+        foreach (Meat meat in meats)
         {
-            Console.WriteLine(line);
+            Console.WriteLine($"${meat.Id} - {meat.Cut} : {meat.Price}");
         }
-    }
-
-    static void RemoveMeat(string file)
-    {
-        Console.Clear();
-
-        ListAllMeats(file);
 
         int id;
         bool validId;
@@ -160,6 +150,22 @@ internal class Program
 
     }
 
+    void ListAllMeats(string file)
+    {
+        Console.Clear();
+
+        string[] fileLines = File.ReadAllLines(file);
+
+        Console.WriteLine("List of meats: ");
+
+        foreach (string line in fileLines)
+        {
+            Console.WriteLine(line);
+        }
+    }
+
+   
+
     static void RemoveLine(string file, string[] lines, int id)
     {
         List<string> remainingLines = [];
@@ -179,7 +185,7 @@ internal class Program
         File.WriteAllLines(file, remainingLines);
     }
 
-    static bool CheckIdExist(int id, string[] lines)
+    bool CheckIdExist(int id, string[] lines)
     {
         string firstChar;
 
@@ -196,14 +202,14 @@ internal class Program
         return false;
     }
 
-    static void PressKeyMessage()
+    void PressKeyMessage()
     {
         Console.WriteLine("\nPress any key to continue...");
         Console.ReadKey(true);
         Console.Clear();
     }
 
-    static string SendMessageAndGetValue(string message)
+    string SendMessageAndGetValue(string message)
     {
         Console.Write(message);
         string input = Console.ReadLine();
@@ -211,7 +217,7 @@ internal class Program
         return input;
     }
 
-    static void EditMeat(string file)
+    void EditMeat(string file)
     {
         ListAllMeats(file);
 
