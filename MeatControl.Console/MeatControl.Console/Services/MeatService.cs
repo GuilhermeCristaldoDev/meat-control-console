@@ -1,7 +1,7 @@
-﻿using MeatControl.Console.Entities;
-using MeatControl.Console.Repositories;
+﻿using MeatControlConsole.Entities;
+using MeatControlConsole.Repositories;
 
-namespace MeatControl.Console.Services
+namespace MeatControlConsole.Services
 {
     internal class MeatService
     {

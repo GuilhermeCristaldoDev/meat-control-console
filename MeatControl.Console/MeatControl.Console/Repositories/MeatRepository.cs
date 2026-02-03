@@ -1,7 +1,7 @@
-﻿using MeatControl.Console.Entities;
+﻿using MeatControlConsole.Entities;
 using System.Globalization;
 
-namespace MeatControl.Console.Repositories
+namespace MeatControlConsole.Repositories
 {
     internal class MeatRepository : IMeatRepository
     {

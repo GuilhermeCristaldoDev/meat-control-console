@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace MeatControl.Console.Entities
+namespace MeatControlConsole.Entities
 {
     internal class Meat
     {

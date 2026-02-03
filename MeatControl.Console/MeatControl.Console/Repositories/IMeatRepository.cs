@@ -1,6 +1,6 @@
-﻿using MeatControl.Console.Entities;
+﻿using MeatControlConsole.Entities;
 
-namespace MeatControl.Console.Repositories
+namespace MeatControlConsole.Repositories
 {
     internal interface IMeatRepository
     {

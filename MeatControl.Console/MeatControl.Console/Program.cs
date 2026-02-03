@@ -1,6 +1,7 @@
-﻿using MeatControl.Console.Entities;
-using MeatControl.Console.Repositories;
-using MeatControl.Console.Services;
+﻿using MeatControlConsole.Entities;
+using MeatControlConsole.Repositories;
+using MeatControlConsole.Services;
+using MeatControlConsole.Utils;
 using System.Globalization;
 
 internal class Program
@@ -77,22 +78,8 @@ internal class Program
         {
             Console.Clear();
 
-            Console.Write("Type of meat: ");
-            string type = Console.ReadLine();
-
-            double price;
-            bool valid;
-            do
-            {
-                Console.Write("Price: ");
-                string input = Console.ReadLine();
-
-                valid = double.TryParse(input, NumberStyles.Any, CultureInfo.InvariantCulture, out price);
-
-                if (!valid)
-                    Console.WriteLine("Invalid price!");
-            }
-            while (!valid);
+            string type = ConsoleReader.ReadValue<string>("Type of meat: ");
+            double price = ConsoleReader.ReadValue<double>("Price: ");
 
             _meatService.AddMeat(type, price);
 
@@ -121,15 +108,7 @@ internal class Program
 
         WriteAllMeats(meats);
 
-        int id;
-        bool validId;
-
-        do
-        {
-            string input = SendMessageAndGetValue("Enter with the meat ID to be deleted: ");
-            validId = int.TryParse(input, CultureInfo.InvariantCulture, out id);
-        }
-        while (!validId);
+        int id = ConsoleReader.ReadValue<int>("Enter with ID to be deleted: ");
 
         _meatService.RemoveMeat(id);
 
