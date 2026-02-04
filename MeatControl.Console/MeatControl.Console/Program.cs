@@ -59,7 +59,6 @@ internal class Program
                     PressKeyMessage();
                     break;
                 case '0':
-                    Environment.Exit(0);
                     break;
                 default:
                     Console.WriteLine("Invalid option!");
@@ -133,35 +132,15 @@ internal class Program
 
         WriteAllMeats(meats);
 
-        int id;
-        bool validId;
-
-        do
-        {
-            string input = SendMessageAndGetValue("\nEnter with the meat ID to be edited: ");
-
-            validId = int.TryParse(input, out id);
-
-            if (!validId)
-                Console.WriteLine("\nInvalid id!");
-        }
-        while (!validId);
+        int id = ConsoleReader.ReadValue<int>("Enter with the meat ID to be edited: ");
 
         try
         {
             Meat meat = _meatService.GetMeatById(id);
 
-            string newType = SendMessageAndGetValue("New meat type: ");
+            string newType = ConsoleReader.ReadValue<string>("New meat type: ");
 
-            double newPrice;
-            bool validPrice;
-
-            do
-            {
-                string input = SendMessageAndGetValue("New meat price: ");
-                validPrice = double.TryParse(input, CultureInfo.InvariantCulture, out newPrice);
-            }
-            while (!validPrice);
+            double newPrice = ConsoleReader.ReadValue<double>("New meat price: ");
 
             _meatService.EditMeat(id, newType, newPrice);
 
@@ -180,15 +159,6 @@ internal class Program
         Console.ReadKey(true);
         Console.Clear();
     }
-
-    static string SendMessageAndGetValue(string message)
-    {
-        Console.Write(message);
-        string input = Console.ReadLine();
-
-        return input;
-    }
-
     public static void WriteAllMeats(List<Meat> meats)
     {
         foreach (Meat meat in meats)
