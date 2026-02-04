@@ -80,7 +80,16 @@ internal class Program
             string type = ConsoleReader.ReadValue<string>("Type of meat: ");
             double price = ConsoleReader.ReadValue<double>("Price: ");
 
-            _meatService.AddMeat(type, price);
+            try
+            {
+                _meatService.AddMeat(type, price);
+
+                Console.WriteLine("\nMeat added sucessfully!");
+            }
+            catch (DomainException ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
 
             ConsoleKeyInfo key;
 

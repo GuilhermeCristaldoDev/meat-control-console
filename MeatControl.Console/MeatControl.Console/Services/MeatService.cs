@@ -13,20 +13,16 @@ namespace MeatControlConsole.Services
         }
         public void AddMeat(string type, double price)
         {
-            if (string.IsNullOrEmpty(type))
+            try
             {
-                return;
-            }
+                Meat newMeat = new(GetNextMeatId(), type, price);
 
-            if (price <= 0)
+                _repository.Add(newMeat);
+            }
+            catch (DomainException)
             {
-                return;
+                throw;
             }
-
-            Meat newMeat = new(GetNextMeatId(), type, price);
-
-            _repository.Add(newMeat);
-
         }
 
         public void RemoveMeat(int id)
