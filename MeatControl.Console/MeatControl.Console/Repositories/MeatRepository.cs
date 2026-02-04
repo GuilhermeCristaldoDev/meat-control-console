@@ -54,7 +54,7 @@ namespace MeatControlConsole.Repositories
                 meat.Id == id ? newMeat : meat
              )];
 
-            var lines = meats.Select(meat => $"{meat.Id};{meat.Cut};{meat.Price.ToString(CultureInfo.InvariantCulture)}");
+            var lines = meats.Select(m => $"{m.Id};{m.Cut};{m.Price.ToString("F2", CultureInfo.InvariantCulture)}");
 
             File.WriteAllLines(_filePath, lines);
         }

@@ -3,6 +3,7 @@ using MeatControlConsole.Repositories;
 using MeatControlConsole.Services;
 using MeatControlConsole.Utils;
 using System.Globalization;
+using System.Reflection.Metadata;
 
 internal class Program
 {
@@ -90,6 +91,10 @@ internal class Program
             {
                 Console.WriteLine($"Error: {ex.Message}");
             }
+            catch (Exception)
+            {
+                Console.WriteLine("Unexpected error. Try again later...");
+            }
 
             ConsoleKeyInfo key;
 
@@ -172,7 +177,7 @@ internal class Program
     {
         foreach (Meat meat in meats)
         {
-            Console.WriteLine($"{meat.Id} - {meat.Cut} : {meat.Price.ToString("F2", CultureInfo.InvariantCulture)}");
+            Console.WriteLine(meat.ToString());
         }
     }
 

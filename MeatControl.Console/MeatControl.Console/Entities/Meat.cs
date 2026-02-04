@@ -14,7 +14,6 @@ namespace MeatControlConsole.Entities
             if (string.IsNullOrEmpty(cut))
                 throw new DomainException("The meat needs to be of a certain type");
 
-
             if (price <= 0)
                 throw new DomainException("The price of meat cannot be equal to or less than zero.");
 
@@ -25,7 +24,7 @@ namespace MeatControlConsole.Entities
 
         public override string ToString()
         {
-            return $"{Id};{Cut};{Price.ToString("F2", CultureInfo.InvariantCulture)}";
+            return $"{Id} - {Cut} : {Price.ToString("F2", CultureInfo.InvariantCulture)}";
         }
     }
 }
