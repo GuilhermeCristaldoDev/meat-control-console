@@ -1,4 +1,5 @@
 ﻿using MeatControlConsole.Entities;
+using MeatControlConsole.Entities.Enums;
 using System.Globalization;
 
 namespace MeatControlConsole.Repositories
@@ -13,7 +14,7 @@ namespace MeatControlConsole.Repositories
         }
         public void Add(Meat meat)
         {
-            File.AppendAllText(_filePath, $"{meat.Id};{meat.Cut};{meat.Price.ToString(CultureInfo.InvariantCulture)}{Environment.NewLine}");
+            File.AppendAllText(_filePath, $"{meat.Id};{meat.MeatCut};{meat.Price.ToString(CultureInfo.InvariantCulture)}{Environment.NewLine}");
         }
 
         public List<Meat> GetAll()
@@ -27,8 +28,10 @@ namespace MeatControlConsole.Repositories
             {
                 string[] values = line.Split(';');
 
+                Enum.TryParse<MeatCut>(values[1], out MeatCut meatCut);
+
                 meats.Add(new Meat(int.Parse(values[0]),
-                    values[1],
+                    meatCut,
                     double.Parse(values[2])));
             }
 
@@ -41,7 +44,7 @@ namespace MeatControlConsole.Repositories
 
             meats.RemoveAll(meat => meat.Id == id);
 
-            var lines = meats.Select(meat => $"{meat.Id};{meat.Cut};{meat.Price.ToString(CultureInfo.InvariantCulture)}");
+            var lines = meats.Select(meat => $"{meat.Id};{meat.MeatCut};{meat.Price.ToString(CultureInfo.InvariantCulture)}");
 
             File.WriteAllLines(_filePath, lines);
         }
@@ -54,7 +57,7 @@ namespace MeatControlConsole.Repositories
                 meat.Id == id ? newMeat : meat
              )];
 
-            var lines = meats.Select(m => $"{m.Id};{m.Cut};{m.Price.ToString("F2", CultureInfo.InvariantCulture)}");
+            var lines = meats.Select(m => $"{m.Id};{m.MeatCut};{m.Price.ToString(CultureInfo.InvariantCulture)}");
 
             File.WriteAllLines(_filePath, lines);
         }

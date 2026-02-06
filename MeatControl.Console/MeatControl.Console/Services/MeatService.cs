@@ -1,5 +1,7 @@
 ﻿using MeatControlConsole.Entities;
+using MeatControlConsole.Entities.Exceptions;
 using MeatControlConsole.Repositories;
+using MeatControlConsole.Entities.Enums;
 
 namespace MeatControlConsole.Services
 {
@@ -11,7 +13,7 @@ namespace MeatControlConsole.Services
         {
             _repository = repository;
         }
-        public void AddMeat(string type, double price)
+        public void AddMeat(MeatCut type, double price)
         {
             try
             {
@@ -40,9 +42,9 @@ namespace MeatControlConsole.Services
             _repository.Delete(id);
         }
 
-        public void EditMeat(int id, string type, double price)
+        public void EditMeat(int id, MeatCut type, double price)
         {
-            List<Meat> meats = _repository.GetAll();
+            _repository.GetAll();
 
             if(price <= 0)
             {

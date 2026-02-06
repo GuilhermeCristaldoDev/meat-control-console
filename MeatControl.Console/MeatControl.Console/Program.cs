@@ -1,9 +1,10 @@
 ﻿using MeatControlConsole.Entities;
+using MeatControlConsole.Entities.Exceptions;
 using MeatControlConsole.Repositories;
 using MeatControlConsole.Services;
 using MeatControlConsole.Utils;
-using System.Globalization;
-using System.Reflection.Metadata;
+using MeatControlConsole.Entities.Enums;
+using System.Net.Sockets;
 
 internal class Program
 {
@@ -78,7 +79,23 @@ internal class Program
         {
             Console.Clear();
 
-            string type = ConsoleReader.ReadValue<string>("Type of meat: ");
+            var vet = Enum.GetValuesAsUnderlyingType<MeatCut>();
+            
+            for(int i = 1; i <= vet.Length; i++)
+            {
+                Console.WriteLine($"{i} - {(MeatCut)i} ");
+            }
+
+            int input = ConsoleReader.ReadValue<int>("Choose meat type:");
+
+            if (!Enum.IsDefined(typeof(MeatCut), input))
+            {
+                Console.WriteLine("Numero de carne invalido");
+                return;
+            }
+
+            MeatCut type = (MeatCut)input;
+
             double price = ConsoleReader.ReadValue<double>("Price: ");
 
             try
@@ -152,15 +169,19 @@ internal class Program
         {
             Meat meat = _meatService.GetMeatById(id);
 
-            string newType = ConsoleReader.ReadValue<string>("New meat type: ");
+            if(!ConsoleReader.ReadEnumValue<MeatCut>("New meat type: ", out var newMeatType))
+            {
+                Console.WriteLine("Invalid meat type");
+                return;
+            }
 
             double newPrice = ConsoleReader.ReadValue<double>("New meat price: ");
 
-            _meatService.EditMeat(id, newType, newPrice);
+            _meatService.EditMeat(id, newMeatType, newPrice);
 
             Console.WriteLine("\nItem was edited!");
         }
-        catch (NotFoundExeption ex)
+        catch (DomainException ex)
         {
             Console.WriteLine(ex.Message);
         }

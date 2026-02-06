@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Runtime.InteropServices.ObjectiveC;
 
 namespace MeatControlConsole.Utils
 {
@@ -18,6 +19,21 @@ namespace MeatControlConsole.Utils
 
                 Console.WriteLine("Invalid input!");
             }
+        }
+
+        public static bool ReadEnumValue<TEnum> (string message, out TEnum value)
+            where TEnum : struct, Enum
+        {
+            int option = ConsoleReader.ReadValue<int>(message);
+
+            if(!Enum.IsDefined(typeof(TEnum), option))
+            {
+                value = default;
+                return false;
+            }
+
+            value = (TEnum)(Object)option;
+            return true;
         }
     }
 }

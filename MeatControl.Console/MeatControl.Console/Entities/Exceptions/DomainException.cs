@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MeatControlConsole.Entities
+namespace MeatControlConsole.Entities.Exceptions
 {
     internal class DomainException : ApplicationException
     {

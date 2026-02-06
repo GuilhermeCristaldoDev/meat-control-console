@@ -1,30 +1,30 @@
-﻿using System.Globalization;
-using System.Runtime.CompilerServices;
+﻿using MeatControlConsole.Entities.Exceptions;
+using System.Globalization;
+using MeatControlConsole.Entities.Enums;
 
 namespace MeatControlConsole.Entities
 {
     internal class Meat
     {
         public int Id { get; private set; }
-        public string Cut { get; set; }
+
+        public MeatCut MeatCut;
         public double Price { get; set; }
 
-        public Meat(int id, string cut, double price)
+        public Meat(int id, MeatCut cut, double price)
         {
-            if (string.IsNullOrEmpty(cut))
-                throw new DomainException("The meat needs to be of a certain type");
-
+ 
             if (price <= 0)
                 throw new DomainException("The price of meat cannot be equal to or less than zero.");
 
             Id = id;
-            Cut = cut;
+            MeatCut = cut;
             Price = price;
         }
 
         public override string ToString()
         {
-            return $"{Id} - {Cut} : {Price.ToString("F2", CultureInfo.InvariantCulture)}";
+            return $"{Id} - {MeatCut} : {Price.ToString("F2", CultureInfo.InvariantCulture)}";
         }
     }
 }
