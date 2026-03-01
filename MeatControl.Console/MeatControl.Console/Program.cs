@@ -4,7 +4,7 @@ using MeatControlConsole.Repositories;
 using MeatControlConsole.Services;
 using MeatControlConsole.Utils;
 using MeatControlConsole.Entities.Enums;
-using System.Net.Sockets;
+using System.Globalization;
 
 internal class Program
 {
@@ -153,6 +153,9 @@ internal class Program
         List<Meat> meats = _meatService.GetAllMeats();
 
         WriteAllMeats(meats);
+
+        MeatSummary summary = _meatService.CalculateSummary(meats);
+        Console.WriteLine($"Qtd meats: {summary.TotalMeats} Total: R${summary.TotalValue.ToString("F2", CultureInfo.InvariantCulture)}");
     }
 
     void EditMeatUI()
@@ -194,6 +197,7 @@ internal class Program
         Console.ReadKey(true);
         Console.Clear();
     }
+
     public static void WriteAllMeats(List<Meat> meats)
     {
         foreach (Meat meat in meats)

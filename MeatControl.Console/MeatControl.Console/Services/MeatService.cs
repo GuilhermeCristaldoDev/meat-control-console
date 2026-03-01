@@ -73,6 +73,17 @@ namespace MeatControlConsole.Services
             return _repository.GetAll();
         }
 
+        public MeatSummary GetStockSummary()
+        {
+            List<Meat> meats = _repository.GetAll();
+            return CalculateSummary(meats);
+        }
+
+        public MeatSummary CalculateSummary(IEnumerable<Meat> meats)
+        {
+            return new MeatSummary(meats.Count(), meats.Sum(m => m.Price));
+        }
+
         public Meat GetMeatById(int id)
         {
             Meat meat = _repository.GetById(id) ?? throw new Exception("Meat doesn't exists");
@@ -93,5 +104,7 @@ namespace MeatControlConsole.Services
 
             return maxId + 1;
         }
+
+
     }
 }
