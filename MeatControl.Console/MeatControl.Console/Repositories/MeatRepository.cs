@@ -32,7 +32,7 @@ namespace MeatControlConsole.Repositories
 
                 meats.Add(new Meat(int.Parse(values[0]),
                     meatCut,
-                    double.Parse(values[2])));
+                    double.Parse(values[2].ToString(CultureInfo.InvariantCulture))));
             }
 
             return meats;
