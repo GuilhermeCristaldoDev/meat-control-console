@@ -9,10 +9,10 @@ namespace MeatControlConsole.Entities
         public int TotalMeats { get; set; }
         public double TotalValue { get; set; }
 
-        public MeatSummary(int totalMeats, double totalValue)
+        public void CalculateSummary(IEnumerable<Meat> meats)
         {
-            TotalMeats = totalMeats;
-            TotalValue = totalValue;
+            TotalMeats = meats.Count();
+            TotalValue = meats.Sum(m => m.Price);
         }
     }
 

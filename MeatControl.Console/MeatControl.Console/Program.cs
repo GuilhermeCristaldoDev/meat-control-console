@@ -154,7 +154,8 @@ internal class Program
 
         WriteAllMeats(meats);
 
-        MeatSummary summary = _meatService.CalculateSummary(meats);
+        MeatSummary summary = new();
+        summary.CalculateSummary(meats);
         Console.WriteLine($"Qtd meats: {summary.TotalMeats} Total: R${summary.TotalValue.ToString("F2", CultureInfo.InvariantCulture)}");
     }
 
