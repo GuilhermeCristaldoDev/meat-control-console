@@ -86,11 +86,11 @@ internal class Program
                 Console.WriteLine($"{i} - {(MeatCut)i} ");
             }
 
-            int input = ConsoleReader.ReadValue<int>("Choose meat type:");
+            int input = ConsoleReader.ReadValue<int>("Choose meat type: ");
 
             if (!Enum.IsDefined(typeof(MeatCut), input))
             {
-                Console.WriteLine("Numero de carne invalido");
+                Console.WriteLine("Numero de carne invalido ");
                 return;
             }
 

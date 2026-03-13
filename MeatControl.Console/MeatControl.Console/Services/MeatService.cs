@@ -30,14 +30,12 @@ namespace MeatControlConsole.Services
         public void RemoveMeat(int id)
         {
             if (id <= 0)
-            {
                 return;
-            }
+
 
             if (!IdExists(id))
-            {
                 return;
-            }
+
 
             _repository.Delete(id);
         }
@@ -46,7 +44,7 @@ namespace MeatControlConsole.Services
         {
             _repository.GetAll();
 
-            if(price <= 0)
+            if (price <= 0)
             {
                 return;
             }
@@ -63,8 +61,7 @@ namespace MeatControlConsole.Services
             Meat meat = meats.Find(meat => meat.Id == id);
 
             if (meat == null)
-                throw new Exception("This meat doesn't exists");
-
+                return false;
             return true;
         }
 
