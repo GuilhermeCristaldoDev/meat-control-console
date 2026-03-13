@@ -13,7 +13,7 @@ namespace MeatControlConsole.Services
         {
             _repository = repository;
         }
-        public void AddMeat(MeatCut type, double price)
+        public void AddMeat(MeatCut type, decimal price)
         {
             try
             {
@@ -42,7 +42,7 @@ namespace MeatControlConsole.Services
             _repository.Delete(id);
         }
 
-        public void EditMeat(int id, MeatCut type, double price)
+        public void EditMeat(int id, MeatCut type, decimal price)
         {
             _repository.GetAll();
 

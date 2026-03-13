@@ -8,10 +8,10 @@ namespace MeatControlConsole.Entities
     {
         public int Id { get; private set; }
 
-        public MeatCut MeatCut;
-        public double Price { get; set; }
+        public MeatCut MeatCut { get; private set; }
+        public decimal Price { get; set; }
 
-        public Meat(int id, MeatCut cut, double price)
+        public Meat(int id, MeatCut cut, decimal price)
         {
  
             if (price <= 0)

@@ -17,7 +17,7 @@ internal class Program
     private static void Main(string[] args)
 
     {
-        string filePath = "C:\\Users\\Guilherme\\Documents\\churrascaria\\carnes.txt";
+        string filePath = @"C:\Users\Guilherme\Documents\churrascaria\carnes.txt";
 
         IMeatRepository repository = new MeatRepository(filePath);
         MeatService meatService = new(repository);
@@ -96,7 +96,7 @@ internal class Program
 
             MeatCut type = (MeatCut)input;
 
-            double price = ConsoleReader.ReadValue<double>("Price: ");
+            decimal price = ConsoleReader.ReadValue<decimal>("Price: ");
 
             try
             {
@@ -179,7 +179,7 @@ internal class Program
                 return;
             }
 
-            double newPrice = ConsoleReader.ReadValue<double>("New meat price: ");
+            decimal newPrice = ConsoleReader.ReadValue<decimal>("New meat price: ");
 
             _meatService.EditMeat(id, newMeatType, newPrice);
 

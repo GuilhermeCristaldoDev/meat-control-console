@@ -7,7 +7,7 @@ namespace MeatControlConsole.Entities
     internal class MeatSummary
     {
         public int TotalMeats { get; set; }
-        public double TotalValue { get; set; }
+        public decimal TotalValue { get; set; }
 
         public void CalculateSummary(IEnumerable<Meat> meats)
         {
