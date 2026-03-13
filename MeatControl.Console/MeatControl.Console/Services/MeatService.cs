@@ -27,31 +27,30 @@ namespace MeatControlConsole.Services
             }
         }
 
-        public void RemoveMeat(int id)
+        public string RemoveMeat(int id)
         {
-            if (id <= 0)
-                return;
-
 
             if (!IdExists(id))
-                return;
+                return "Meat doesn't exists!";
 
 
             _repository.Delete(id);
+
+            return "Meat deleted!";
         }
 
-        public void EditMeat(int id, MeatCut type, decimal price)
+        public string EditMeat(int id, MeatCut type, decimal price)
         {
-            _repository.GetAll();
+            if (!IdExists(id))
+                return "Meat doesn't exists!";
 
             if (price <= 0)
-            {
-                return;
-            }
+                return "Price can't be less or equal zero!";
 
             Meat newMeat = new(id, type, price);
-
             _repository.Update(id, newMeat);
+
+            return "Meat updated!";
         }
 
         public bool IdExists(int id)
@@ -60,9 +59,7 @@ namespace MeatControlConsole.Services
 
             Meat meat = meats.Find(meat => meat.Id == id);
 
-            if (meat == null)
-                return false;
-            return true;
+            return meat != null;
         }
 
         public List<Meat> GetAllMeats()

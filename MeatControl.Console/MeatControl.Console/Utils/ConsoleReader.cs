@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using System.Runtime.InteropServices.ObjectiveC;
 
 namespace MeatControlConsole.Utils
 {

@@ -17,7 +17,10 @@ internal class Program
     private static void Main(string[] args)
 
     {
-        string filePath = @"C:\Users\Guilherme\Documents\churrascaria\carnes.txt";
+        string baseDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        string sessionsDir = Path.Combine(baseDir, "MeatConsole");
+        Directory.CreateDirectory(sessionsDir);
+        string filePath = Path.Combine(sessionsDir, $"session_{DateOnly.FromDateTime(DateTime.Now):yyy-MM-dd}.txt");
 
         IMeatRepository repository = new MeatRepository(filePath);
         MeatService meatService = new(repository);
@@ -140,10 +143,7 @@ internal class Program
 
         int id = ConsoleReader.ReadValue<int>("Enter with ID to be deleted: ");
 
-        _meatService.RemoveMeat(id);
-
-        Console.WriteLine("\nMeat deleted!");
-
+        Console.WriteLine(_meatService.RemoveMeat(id));
     }
 
     void ListAllMeatsUI()
@@ -181,9 +181,7 @@ internal class Program
 
             decimal newPrice = ConsoleReader.ReadValue<decimal>("New meat price: ");
 
-            _meatService.EditMeat(id, newMeatType, newPrice);
-
-            Console.WriteLine("\nItem was edited!");
+            Console.WriteLine(_meatService.EditMeat(id, newMeatType, newPrice));
         }
         catch (DomainException ex)
         {
