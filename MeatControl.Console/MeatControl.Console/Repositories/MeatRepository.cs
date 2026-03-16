@@ -30,9 +30,11 @@ namespace MeatControlConsole.Repositories
 
                 bool parsed = Enum.TryParse<MeatCut>(values[1], out MeatCut meatCut);
 
+                if (!parsed) throw new FormatException($"Invalid value to MeatCategory: {values[1]}");
+
                 meats.Add(new Meat(int.Parse(values[0]),
                     meatCut,
-                    decimal.Parse(values[2].ToString(CultureInfo.InvariantCulture))));
+                    decimal.Parse(values[2], CultureInfo.InvariantCulture)));
             }
 
             return meats;
@@ -66,7 +68,7 @@ namespace MeatControlConsole.Repositories
         {
             List<Meat> meats = GetAll();
 
-            return meats.Find(meat => meat.Id == id);
+            return meats.FirstOrDefault(meat => meat.Id == id);
         }
     }
 }

@@ -60,9 +60,9 @@ namespace MeatControlConsole.Services
             return _repository.GetAll();
         }
 
-        public Meat GetMeatById(int id)
+        public Meat? GetMeatById(int id)
         {
-            Meat meat = _repository.GetById(id) ?? throw new Exception("Meat doesn't exists");
+            Meat meat = _repository.GetById(id);
 
             return meat;
         }

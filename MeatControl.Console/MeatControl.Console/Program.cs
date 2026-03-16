@@ -83,8 +83,8 @@ internal class Program
             Console.Clear();
 
             var vet = Enum.GetValuesAsUnderlyingType<MeatCut>();
-            
-            for(int i = 1; i <= vet.Length; i++)
+
+            for (int i = 1; i <= vet.Length; i++)
             {
                 Console.WriteLine($"{i} - {(MeatCut)i} ");
             }
@@ -93,7 +93,7 @@ internal class Program
 
             if (!Enum.IsDefined(typeof(MeatCut), input))
             {
-                Console.WriteLine("Numero de carne invalido ");
+                Console.WriteLine("Invalid meat type!");
                 return;
             }
 
@@ -148,22 +148,39 @@ internal class Program
     {
         Console.Clear();
 
-        List<Meat> meats = _meatService.GetAllMeats();
+        try
+        {
+            List<Meat> meats = _meatService.GetAllMeats();
 
-        WriteAllMeats(meats);
+            WriteAllMeats(meats);
 
-        MeatSummary summary = new();
-        summary.CalculateSummary(meats);
-        Console.WriteLine($"Qtd meats: {summary.TotalMeats} Total: R${summary.TotalValue.ToString("F2", CultureInfo.InvariantCulture)}");
+            MeatSummary summary = new();
+            summary.CalculateSummary(meats);
+            Console.WriteLine($"Qtd meats: {summary.TotalMeats} Total: R${summary.TotalValue.ToString("F2", CultureInfo.InvariantCulture)}");
+        }
+        catch (FormatException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+
     }
 
     void EditMeatUI()
     {
         Console.Clear();
 
-        List<Meat> meats = _meatService.GetAllMeats();
+        try
+        {
+            List<Meat> meats = _meatService.GetAllMeats();
 
-        WriteAllMeats(meats);
+            WriteAllMeats(meats);
+        }
+        catch (FormatException ex)
+        {
+            Console.WriteLine(ex.Message);
+            return;
+        }
 
         int id = ConsoleReader.ReadValue<int>("Enter with the meat ID to be edited: ");
 
@@ -171,7 +188,13 @@ internal class Program
         {
             Meat meat = _meatService.GetMeatById(id);
 
-            if(!ConsoleReader.ReadEnumValue<MeatCut>("New meat type: ", out var newMeatType))
+            if (meat != null)
+            {
+                Console.WriteLine("Meat doesn't exists!");
+                return;
+            }
+
+            if (!ConsoleReader.ReadEnumValue<MeatCut>("New meat type: ", out var newMeatType))
             {
                 Console.WriteLine("Invalid meat type");
                 return;
@@ -190,7 +213,7 @@ internal class Program
 
     static void PressKeyMessage()
     {
-        Console.WriteLine("\nPress any key to continue...");
+        Console.WriteLine($"{Environment.NewLine}Press any key to continue...");
         Console.ReadKey(true);
         Console.Clear();
     }
