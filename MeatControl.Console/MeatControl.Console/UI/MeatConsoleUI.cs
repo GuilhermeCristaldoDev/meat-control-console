@@ -22,12 +22,15 @@ namespace MeatControlConsole.UI
 
             do
             {
-                Console.Clear();
-                Console.WriteLine("[1] - Add meat");
-                Console.WriteLine("[2] - Remove meat");
-                Console.WriteLine("[3] - List all meats");
-                Console.WriteLine("[4] - Edit meat");
-                Console.WriteLine("[0] - Exit");
+                ConsoleHelper.PrintHeader();
+                ConsoleHelper.PrintSectionTitle("Main Menu");
+                ConsoleHelper.PrintMenuItem("1", "Add meat");
+                ConsoleHelper.PrintMenuItem("2", "Remove meat");
+                ConsoleHelper.PrintMenuItem("3", "List all meats");
+                ConsoleHelper.PrintMenuItem("4", "Edit meat");
+                ConsoleHelper.PrintMenuItem("0", "Exit", muted: true);
+                ConsoleHelper.PrintSeparator();
+                ConsoleHelper.PrintMuted("Choose an option ›");
 
                 ConsoleKeyInfo key = Console.ReadKey(true);
                 option = key.KeyChar;
@@ -39,21 +42,21 @@ namespace MeatControlConsole.UI
                         break;
                     case '2':
                         RemoveMeatUI();
-                        PressKeyMessage();
+                        ConsoleHelper.PressAnyKey();
                         break;
                     case '3':
                         ListAllMeatsUI();
-                        PressKeyMessage();
+                        ConsoleHelper.PressAnyKey();
                         break;
                     case '4':
                         EditMeatUI();
-                        PressKeyMessage();
+                        ConsoleHelper.PressAnyKey();
                         break;
                     case '0':
                         break;
                     default:
-                        Console.WriteLine("Invalid option!");
-                        PressKeyMessage();
+                        ConsoleHelper.PrintError("Invalid option!");
+                        ConsoleHelper.PressAnyKey();
                         break;
                 }
             }
@@ -66,162 +69,154 @@ namespace MeatControlConsole.UI
 
             do
             {
-                Console.Clear();
-
+                ConsoleHelper.PrintHeader();
+                ConsoleHelper.PrintSectionTitle("Add Meat");
                 ListAllMeatCuts();
 
-                int input = ConsoleReader.ReadValue<int>("Choose meat type: ");
+                int input = ConsoleReader.ReadValue<int>("\n  Choose meat type: ");
 
                 if (!Enum.IsDefined(typeof(MeatCut), input))
                 {
-                    Console.WriteLine("Invalid meat type!");
+                    ConsoleHelper.PrintError("Invalid meat type!");
+                    ConsoleHelper.PressAnyKey();
                     return;
                 }
 
                 MeatCut type = (MeatCut)input;
-
-                decimal price = ConsoleReader.ReadValue<decimal>("Price: ");
+                decimal price = ConsoleReader.ReadValue<decimal>("  Price: ");
 
                 try
                 {
-                    Console.WriteLine(_meatService.AddMeat(type, price));
+                    ConsoleHelper.PrintSuccess(_meatService.AddMeat(type, price));
                 }
                 catch (DomainException ex)
                 {
-                    Console.WriteLine($"Error: {ex.Message}");
+                    ConsoleHelper.PrintError(ex.Message);
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine("Unexpected error. Try again later...");
+                    ConsoleHelper.PrintError("Unexpected error. Try again later...");
                 }
 
                 ConsoleKeyInfo key;
-
                 do
                 {
-                    Console.Write("\nAdd more one meat (y/n)? ");
+                    ConsoleHelper.PrintMuted("\n  Add another meat? (y/n)");
                     key = Console.ReadKey(true);
-
-                    if (key.KeyChar != 'y' && key.KeyChar != 'n') Console.WriteLine("\nInvalid key!");
+                    if (key.KeyChar != 'y' && key.KeyChar != 'n')
+                        ConsoleHelper.PrintError("Invalid key!");
                 }
                 while (key.KeyChar != 'y' && key.KeyChar != 'n');
 
                 continueOption = key.KeyChar == 'y';
-
             }
             while (continueOption);
         }
 
         void RemoveMeatUI()
         {
-            Console.Clear();
+            ConsoleHelper.PrintHeader();
+            ConsoleHelper.PrintSectionTitle("Remove Meat");
 
-            List<Meat> meats = _meatService.GetAllMeats();
+            try
+            {
+                List<Meat> meats = _meatService.GetAllMeats();
+                WriteAllMeats(meats);
 
-            WriteAllMeats(meats);
-
-            int id = ConsoleReader.ReadValue<int>("Enter with ID to be deleted: ");
-
-            Console.WriteLine(_meatService.RemoveMeat(id));
+                int id = ConsoleReader.ReadValue<int>("\n  Enter ID to be deleted: ");
+                ConsoleHelper.PrintSuccess(_meatService.RemoveMeat(id));
+            }
+            catch (FormatException ex)
+            {
+                ConsoleHelper.PrintError(ex.Message);
+            }
         }
 
         void ListAllMeatsUI()
         {
-            Console.Clear();
+            ConsoleHelper.PrintHeader();
+            ConsoleHelper.PrintSectionTitle("All Meats");
 
             try
             {
                 List<Meat> meats = _meatService.GetAllMeats();
-
                 WriteAllMeats(meats);
 
                 MeatSummary summary = new();
                 summary.CalculateSummary(meats);
-                Console.WriteLine($"Qtd meats: {summary.TotalMeats} Total: R${summary.TotalValue.ToString("F2", CultureInfo.InvariantCulture)}");
+
+                ConsoleHelper.PrintSeparator();
+                ConsoleHelper.PrintLabel("Total items", summary.TotalMeats.ToString());
+                ConsoleHelper.PrintLabel("Total value", $"R$ {summary.TotalValue.ToString("F2", CultureInfo.InvariantCulture)}");
             }
             catch (FormatException ex)
             {
-                Console.WriteLine(ex.Message);
+                ConsoleHelper.PrintError(ex.Message);
             }
-
-
         }
 
         void EditMeatUI()
         {
-            Console.Clear();
+            ConsoleHelper.PrintHeader();
+            ConsoleHelper.PrintSectionTitle("Edit Meat");
 
             try
             {
                 List<Meat> meats = _meatService.GetAllMeats();
-
                 WriteAllMeats(meats);
             }
             catch (FormatException ex)
             {
-                Console.WriteLine(ex.Message);
+                ConsoleHelper.PrintError(ex.Message);
                 return;
             }
 
-            int id = ConsoleReader.ReadValue<int>("Enter with the meat ID to be edited: ");
+            int id = ConsoleReader.ReadValue<int>("\n  Enter meat ID to be edited: ");
 
             try
             {
-                Meat meat = _meatService.GetMeatById(id);
+                Meat? meat = _meatService.GetMeatById(id);
 
                 if (meat == null)
                 {
-                    Console.WriteLine("Meat doesn't exists!");
+                    ConsoleHelper.PrintError("Meat doesn't exist!");
                     return;
                 }
 
                 ListAllMeatCuts();
 
-                if (!ConsoleReader.ReadEnumValue<MeatCut>("New meat type: ", out var newMeatType))
+                if (!ConsoleReader.ReadEnumValue<MeatCut>("  New meat type: ", out var newMeatType))
                 {
-                    Console.WriteLine("Invalid meat type");
+                    ConsoleHelper.PrintError("Invalid meat type!");
                     return;
                 }
 
-                decimal newPrice = ConsoleReader.ReadValue<decimal>("New meat price: ");
-
-                Console.WriteLine(_meatService.EditMeat(id, newMeatType, newPrice));
+                decimal newPrice = ConsoleReader.ReadValue<decimal>("  New price: ");
+                ConsoleHelper.PrintSuccess(_meatService.EditMeat(id, newMeatType, newPrice));
             }
             catch (DomainException ex)
             {
-                Console.WriteLine(ex.Message);
+                ConsoleHelper.PrintError(ex.Message);
             }
-
-        }
-
-        static void PressKeyMessage()
-        {
-            Console.WriteLine($"{Environment.NewLine}Press any key to continue...");
-            Console.ReadKey(true);
-            Console.Clear();
         }
 
         public static void WriteAllMeats(List<Meat> meats)
         {
             foreach (Meat meat in meats)
-            {
-                Console.WriteLine(meat.ToString());
-            }
+                ConsoleHelper.PrintMeatLine(
+                    $"#{meat.Id}",
+                    ConsoleHelper.FormatEnumName(meat.MeatCut.ToString()),
+                    $"R$ {meat.Price.ToString("F2", CultureInfo.InvariantCulture)}"
+                );
         }
 
         public static void ListAllMeatCuts()
         {
+            ConsoleHelper.PrintSeparator();
             var vet = Enum.GetValuesAsUnderlyingType<MeatCut>();
-
-            Console.WriteLine();
-
             for (int i = 1; i <= vet.Length; i++)
-            {
-                Console.WriteLine($"{i} - {(MeatCut)i}");
-            }
-
-            Console.WriteLine();
-
+                ConsoleHelper.PrintLabel(i.ToString(), ConsoleHelper.FormatEnumName(((MeatCut)i).ToString()));
+            ConsoleHelper.PrintSeparator();
         }
     }
 }

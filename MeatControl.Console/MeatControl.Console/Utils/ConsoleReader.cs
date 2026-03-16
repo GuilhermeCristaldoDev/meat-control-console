@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using MeatControlConsole.UI;
 
 namespace MeatControlConsole.Utils
 {
@@ -16,7 +17,7 @@ namespace MeatControlConsole.Utils
                 if (T.TryParse(input, CultureInfo.InvariantCulture, out var result))
                     return result;
 
-                Console.WriteLine("Invalid input!");
+                ConsoleHelper.PrintError("Invalid input!");
             }
         }
 
