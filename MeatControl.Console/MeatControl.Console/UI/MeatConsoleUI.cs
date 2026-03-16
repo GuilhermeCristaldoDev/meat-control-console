@@ -22,6 +22,7 @@ namespace MeatControlConsole.UI
 
             do
             {
+                Console.Clear();
                 Console.WriteLine("[1] - Add meat");
                 Console.WriteLine("[2] - Remove meat");
                 Console.WriteLine("[3] - List all meats");
@@ -35,7 +36,6 @@ namespace MeatControlConsole.UI
                 {
                     case '1':
                         AddMeatUI();
-                        PressKeyMessage();
                         break;
                     case '2':
                         RemoveMeatUI();
@@ -68,12 +68,7 @@ namespace MeatControlConsole.UI
             {
                 Console.Clear();
 
-                var vet = Enum.GetValuesAsUnderlyingType<MeatCut>();
-
-                for (int i = 1; i <= vet.Length; i++)
-                {
-                    Console.WriteLine($"{i} - {(MeatCut)i} ");
-                }
+                ListAllMeatCuts();
 
                 int input = ConsoleReader.ReadValue<int>("Choose meat type: ");
 
@@ -174,11 +169,13 @@ namespace MeatControlConsole.UI
             {
                 Meat meat = _meatService.GetMeatById(id);
 
-                if (meat != null)
+                if (meat == null)
                 {
                     Console.WriteLine("Meat doesn't exists!");
                     return;
                 }
+
+                ListAllMeatCuts();
 
                 if (!ConsoleReader.ReadEnumValue<MeatCut>("New meat type: ", out var newMeatType))
                 {
@@ -212,5 +209,19 @@ namespace MeatControlConsole.UI
             }
         }
 
+        public static void ListAllMeatCuts()
+        {
+            var vet = Enum.GetValuesAsUnderlyingType<MeatCut>();
+
+            Console.WriteLine();
+
+            for (int i = 1; i <= vet.Length; i++)
+            {
+                Console.WriteLine($"{i} - {(MeatCut)i}");
+            }
+
+            Console.WriteLine();
+
+        }
     }
 }
