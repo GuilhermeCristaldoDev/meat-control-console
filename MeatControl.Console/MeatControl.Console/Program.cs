@@ -20,7 +20,7 @@ internal class Program
         string baseDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         string sessionsDir = Path.Combine(baseDir, "MeatConsole");
         Directory.CreateDirectory(sessionsDir);
-        string filePath = Path.Combine(sessionsDir, $"session_{DateOnly.FromDateTime(DateTime.Now):yyy-MM-dd}.txt");
+        string filePath = Path.Combine(sessionsDir, $"session_{DateOnly.FromDateTime(DateTime.Now):yyyy-MM-dd}.txt");
 
         IMeatRepository repository = new MeatRepository(filePath);
         MeatService meatService = new(repository);
@@ -103,9 +103,7 @@ internal class Program
 
             try
             {
-                _meatService.AddMeat(type, price);
-
-                Console.WriteLine("\nMeat added sucessfully!");
+                Console.WriteLine(_meatService.AddMeat(type, price));
             }
             catch (DomainException ex)
             {

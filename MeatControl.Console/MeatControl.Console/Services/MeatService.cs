@@ -13,18 +13,11 @@ namespace MeatControlConsole.Services
         {
             _repository = repository;
         }
-        public void AddMeat(MeatCut type, decimal price)
+        public string AddMeat(MeatCut type, decimal price)
         {
-            try
-            {
-                Meat newMeat = new(GetNextMeatId(), type, price);
-
-                _repository.Add(newMeat);
-            }
-            catch (DomainException)
-            {
-                throw;
-            }
+            Meat newMeat = new(GetNextMeatId(), type, price);
+            _repository.Add(newMeat);
+            return "Meat added sucessfully!";
         }
 
         public string RemoveMeat(int id)

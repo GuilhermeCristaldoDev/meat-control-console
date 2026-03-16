@@ -28,7 +28,7 @@ namespace MeatControlConsole.Repositories
             {
                 string[] values = line.Split(';');
 
-                Enum.TryParse<MeatCut>(values[1], out MeatCut meatCut);
+                bool parsed = Enum.TryParse<MeatCut>(values[1], out MeatCut meatCut);
 
                 meats.Add(new Meat(int.Parse(values[0]),
                     meatCut,
