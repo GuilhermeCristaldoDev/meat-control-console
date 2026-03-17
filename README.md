@@ -36,7 +36,7 @@ This isn't a tutorial project. It solves a real operational pain and runs in a r
 
 ## ✅ Features
 
-- Register meat cuts with name, price, and unit of measurement
+- Register meat cuts with name and price.
 - List all registered cuts in a formatted view
 - Edit any field of an existing cut
 - Delete a cut by ID with existence validation
@@ -57,7 +57,6 @@ The core domain entity representing a single meat cut entry.
 | `Id`       | `int`     | Unique identifier, auto-incremented  |
 | `Name`     | `string`  | Name of the meat cut                 |
 | `Price`    | `decimal` | Price per unit (decimal for precision)|
-| `Unit`     | `string`  | Unit of sale (e.g., `kg`, `unit`)    |
 
 > `decimal` is used instead of `double` to avoid floating-point precision errors — critical when dealing with prices.
 
@@ -76,6 +75,7 @@ meat-control-console/
 ├── Entities/          → Domain models (MeatCut, MeatSummary)
 ├── Repositories/      → Data access layer (IMeatRepository + implementation)
 ├── Services/          → Business logic and orchestration
+├── UI/                → Display title UI and style formations
 ├── Utils/             → File I/O helpers, formatting, shared utilities
 └── Program.cs         → Entry point and dependency wiring
 ```
