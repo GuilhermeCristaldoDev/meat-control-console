@@ -5,7 +5,7 @@
 **A real-world C# console application to manage daily operations of a meat business.**  
 Built to solve an actual problem. Used in production by my father's business every week.
 
-![C#](https://img.shields.io/badge/C%23-.NET%208-239120?style=flat-square&logo=csharp&logoColor=white)
+![C#](https://img.shields.io/badge/C%23-.NET%2010-239120?style=flat-square&logo=csharp&logoColor=white)
 ![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?style=flat-square&logo=dotnet&logoColor=white)
 ![Status](https://img.shields.io/badge/status-active-success?style=flat-square)
 ![Architecture](https://img.shields.io/badge/architecture-layered-blue?style=flat-square)
@@ -28,10 +28,9 @@ This isn't a tutorial project. It solves a real operational pain and runs in a r
 
 ## 🖥️ Application preview
 
-```
-<img width="593" height="523" alt="image" src="https://github.com/user-attachments/assets/a88da5bc-133d-4268-8e12-0d143c9aafcc" />
-
-```
+<div align="center">
+  <img src=".github/assets/menu-preview.png" alt="Meat Control Console - Main Menu" width="600"/>
+</div>
 
 ---
 
@@ -134,7 +133,7 @@ var path = Path.Combine(folder, "MeatConsole", $"session_{DateTime.Today:yyyy-MM
 
 ### Prerequisites
 
-- [.NET SDK 8.0+](https://dotnet.microsoft.com/download) installed
+- [.NET SDK 10.0+](https://dotnet.microsoft.com/download) installed
 - Any terminal (Windows, Linux, macOS)
 
 ### Clone and run
@@ -169,7 +168,7 @@ Generate a self-contained executable (no .NET installation required on the targe
 dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true
 
 # The .exe will be at:
-# bin/Release/net8.0/win-x64/publish/meat-control-console.exe
+# bin/Release/net10.0/win-x64/publish/meat-control-console.exe
 ```
 
 ### Option 2 — Download from GitHub Releases
