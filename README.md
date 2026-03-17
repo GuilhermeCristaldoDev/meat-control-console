@@ -6,7 +6,7 @@
 Built to solve an actual problem. Used in production by my father's business every week.
 
 ![C#](https://img.shields.io/badge/C%23-.NET%208-239120?style=flat-square&logo=csharp&logoColor=white)
-![.NET](https://img.shields.io/badge/.NET-8.0-512BD4?style=flat-square&logo=dotnet&logoColor=white)
+![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?style=flat-square&logo=dotnet&logoColor=white)
 ![Status](https://img.shields.io/badge/status-active-success?style=flat-square)
 ![Architecture](https://img.shields.io/badge/architecture-layered-blue?style=flat-square)
 ![Persistence](https://img.shields.io/badge/persistence-TXT%20files-orange?style=flat-square)
@@ -29,19 +29,8 @@ This isn't a tutorial project. It solves a real operational pain and runs in a r
 ## 🖥️ Application preview
 
 ```
-╔══════════════════════════════════════════╗
-║          MEAT CONTROL CONSOLE            ║
-╠══════════════════════════════════════════╣
-║                                          ║
-║   [1]  Register new meat cut             ║
-║   [2]  List all meat cuts                ║
-║   [3]  Edit a meat cut                   ║
-║   [4]  Delete a meat cut                 ║
-║   [0]  Exit                              ║
-║                                          ║
-╚══════════════════════════════════════════╝
+<img width="593" height="523" alt="image" src="https://github.com/user-attachments/assets/a88da5bc-133d-4268-8e12-0d143c9aafcc" />
 
-> Select an option:
 ```
 
 ---
